@@ -1,0 +1,117 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\Projects\\Godot\\GodotToolkit\\obj\\Debug\\net6.0-windows7.0\\scopedcss\\bundle\\GodotToolkit.styles.css",
+      "PackagePath": "staticwebassets\\GodotToolkit.styles.css"
+    },
+    {
+      "Id": "D:\\Projects\\Godot\\GodotToolkit\\wwwroot\\css\\app.css",
+      "PackagePath": "staticwebassets\\css\\app.css"
+    },
+    {
+      "Id": "D:\\Projects\\Godot\\GodotToolkit\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css"
+    },
+    {
+      "Id": "D:\\Projects\\Godot\\GodotToolkit\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
+      "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css.map"
+    },
+    {
+      "Id": "D:\\Projects\\Godot\\GodotToolkit\\wwwroot\\css\\font-awesome\\css\\all.min.css",
+      "PackagePath": "staticwebassets\\css\\font-awesome\\css\\all.min.css"
+    },
+    {
+      "Id": "D:\\Projects\\Godot\\GodotToolkit\\wwwroot\\css\\font-awesome\\webfonts\\fa-brands-400.ttf",
+      "PackagePath": "staticwebassets\\css\\font-awesome\\webfonts\\fa-brands-400.ttf"
+    },
+    {
+      "Id": "D:\\Projects\\Godot\\GodotToolkit\\wwwroot\\css\\font-awesome\\webfonts\\fa-brands-400.woff2",
+      "PackagePath": "staticwebassets\\css\\font-awesome\\webfonts\\fa-brands-400.woff2"
+    },
+    {
+      "Id": "D:\\Projects\\Godot\\GodotToolkit\\wwwroot\\css\\font-awesome\\webfonts\\fa-regular-400.ttf",
+      "PackagePath": "staticwebassets\\css\\font-awesome\\webfonts\\fa-regular-400.ttf"
+    },
+    {
+      "Id": "D:\\Projects\\Godot\\GodotToolkit\\wwwroot\\css\\font-awesome\\webfonts\\fa-regular-400.woff2",
+      "PackagePath": "staticwebassets\\css\\font-awesome\\webfonts\\fa-regular-400.woff2"
+    },
+    {
+      "Id": "D:\\Projects\\Godot\\GodotToolkit\\wwwroot\\css\\font-awesome\\webfonts\\fa-solid-900.ttf",
+      "PackagePath": "staticwebassets\\css\\font-awesome\\webfonts\\fa-solid-900.ttf"
+    },
+    {
+      "Id": "D:\\Projects\\Godot\\GodotToolkit\\wwwroot\\css\\font-awesome\\webfonts\\fa-solid-900.woff2",
+      "PackagePath": "staticwebassets\\css\\font-awesome\\webfonts\\fa-solid-900.woff2"
+    },
+    {
+      "Id": "D:\\Projects\\Godot\\GodotToolkit\\wwwroot\\css\\font-awesome\\webfonts\\fa-v4compatibility.ttf",
+      "PackagePath": "staticwebassets\\css\\font-awesome\\webfonts\\fa-v4compatibility.ttf"
+    },
+    {
+      "Id": "D:\\Projects\\Godot\\GodotToolkit\\wwwroot\\css\\font-awesome\\webfonts\\fa-v4compatibility.woff2",
+      "PackagePath": "staticwebassets\\css\\font-awesome\\webfonts\\fa-v4compatibility.woff2"
+    },
+    {
+      "Id": "D:\\Projects\\Godot\\GodotToolkit\\wwwroot\\css\\open-iconic\\FONT-LICENSE",
+      "PackagePath": "staticwebassets\\css\\open-iconic"
+    },
+    {
+      "Id": "D:\\Projects\\Godot\\GodotToolkit\\wwwroot\\css\\open-iconic\\ICON-LICENSE",
+      "PackagePath": "staticwebassets\\css\\open-iconic"
+    },
+    {
+      "Id": "D:\\Projects\\Godot\\GodotToolkit\\wwwroot\\css\\open-iconic\\README.md",
+      "PackagePath": "staticwebassets\\css\\open-iconic\\README.md"
+    },
+    {
+      "Id": "D:\\Projects\\Godot\\GodotToolkit\\wwwroot\\css\\open-iconic\\font\\css\\open-iconic-bootstrap.min.css",
+      "PackagePath": "staticwebassets\\css\\open-iconic\\font\\css\\open-iconic-bootstrap.min.css"
+    },
+    {
+      "Id": "D:\\Projects\\Godot\\GodotToolkit\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.eot",
+      "PackagePath": "staticwebassets\\css\\open-iconic\\font\\fonts\\open-iconic.eot"
+    },
+    {
+      "Id": "D:\\Projects\\Godot\\GodotToolkit\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.otf",
+      "PackagePath": "staticwebassets\\css\\open-iconic\\font\\fonts\\open-iconic.otf"
+    },
+    {
+      "Id": "D:\\Projects\\Godot\\GodotToolkit\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.svg",
+      "PackagePath": "staticwebassets\\css\\open-iconic\\font\\fonts\\open-iconic.svg"
+    },
+    {
+      "Id": "D:\\Projects\\Godot\\GodotToolkit\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.ttf",
+      "PackagePath": "staticwebassets\\css\\open-iconic\\font\\fonts\\open-iconic.ttf"
+    },
+    {
+      "Id": "D:\\Projects\\Godot\\GodotToolkit\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.woff",
+      "PackagePath": "staticwebassets\\css\\open-iconic\\font\\fonts\\open-iconic.woff"
+    },
+    {
+      "Id": "D:\\Projects\\Godot\\GodotToolkit\\wwwroot\\favicon.ico",
+      "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "D:\\Projects\\Godot\\GodotToolkit\\wwwroot\\index.html",
+      "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0-windows7.0\\staticwebassets\\msbuild.GodotToolkit.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0-windows7.0\\staticwebassets\\msbuild.build.GodotToolkit.props",
+      "PackagePath": "build\\GodotToolkit.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0-windows7.0\\staticwebassets\\msbuild.buildMultiTargeting.GodotToolkit.props",
+      "PackagePath": "buildMultiTargeting\\GodotToolkit.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0-windows7.0\\staticwebassets\\msbuild.buildTransitive.GodotToolkit.props",
+      "PackagePath": "buildTransitive\\GodotToolkit.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

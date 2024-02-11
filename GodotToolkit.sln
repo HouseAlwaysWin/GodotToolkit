@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{4A502C39-B579-46A0-A027-E4A2213D36BD}") = "GodotToolkit", "GodotToolkit.csproj", "{FD2BEFC3-755D-4FF6-8F52-EE17895448BE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FD2BEFC3-755D-4FF6-8F52-EE17895448BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD2BEFC3-755D-4FF6-8F52-EE17895448BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD2BEFC3-755D-4FF6-8F52-EE17895448BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD2BEFC3-755D-4FF6-8F52-EE17895448BE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
