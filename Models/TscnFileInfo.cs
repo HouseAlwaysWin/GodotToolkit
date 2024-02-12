@@ -11,5 +11,10 @@ namespace GodotToolkit.Models
         public string FileName { get; set; }
         public string FileFullPath { get; set; }
         public string FileFolderName { get; set; }
+
+        public string NodeName { get; set; }
+        public string NodeType { get; set; }
+        public string NodeParent { get; set; }
+        public List<string> NodeGroups { get; set; } = new List<string>();
     }
 }

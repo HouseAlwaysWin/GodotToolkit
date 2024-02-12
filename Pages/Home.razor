@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using System.Text.RegularExpressions;
 @inject IFolderPicker _folderPicker
 @inject IDialogService _dialogService
 @inject IConfigServices _configService
@@ -181,6 +182,42 @@
         });
     }
 
+    public List<TscnFileInfo> GetTscnInfo(string path)
+    {
+        List<TscnFileInfo> tscnInfoList = new List<TscnFileInfo>();
+        string nodePattern = @"\[node\s+(?<value>([^>]*))\]";
+        using (StreamReader reader = new StreamReader(path))
+        {
+            string line;
+            while ((line = reader.ReadLine()) != null)
+            {
+
+                //if (line.StartsWith("[node") && line.EndsWith("]"))
+                if (Regex.IsMatch(line, nodePattern))
+                {
+                    var nodeInfo = Regex.Match(line, nodePattern).Groups["value"].Value;
+                    var keyValue = Regex.Matches(nodeInfo, @"(?<key>(\w+))=""(?<value>([^""]+))""|(?<key>(\w+))=\[(?<value>([^>]*))\]")
+                                        .Cast<Match>()
+                                        .ToDictionary(q => q.Groups["key"].Value, q => q.Groups["value"].Value);
+                    var nodeName = keyValue.ContainsKey("name") ? keyValue["name"] : string.Empty;
+                    var nodeType = keyValue.ContainsKey("type") ? keyValue["type"] : string.Empty;
+                    var nodeParent = keyValue.ContainsKey("parent") ? keyValue["parent"] : string.Empty;
+                    var nodeGroups = keyValue.ContainsKey("groups") ? keyValue["groups"].Split(",").ToList() : new List<string>();
+                    var newNode = new TscnFileInfo()
+                        {
+                            FileFullPath = path,
+                            NodeName = nodeName,
+                            NodeType = nodeType,
+                            NodeParent = nodeParent,
+                            NodeGroups = nodeGroups
+                        };
+                    tscnInfoList.Add(newNode);
+                }
+            }
+        }
+        return tscnInfoList;
+    }
+
 
     public async Task BuildInitNodeTemplate(string templateName)
     {
@@ -189,6 +226,12 @@
         {
             await Task.Run(async () =>
             {
+
+                var tscnPath = TscnFileList.FirstOrDefault(f => $@"{f.FileFolderName}/{f.FileName}" == TscnFileName);
+                if (tscnPath != null)
+                {
+                    var tscnInfo = GetTscnInfo(tscnPath.FileFullPath);
+                }
                 //var templateInfo = await CustomTemplateBuilder.BuildTemplate(templateName, TemplateVersion,
                 //    new TemplateConfigs()
                 //        {
@@ -222,5 +265,4 @@
             await _dialogService.ShowMessageBox("錯誤", ex.ToString());
         }
     }
-
 }
