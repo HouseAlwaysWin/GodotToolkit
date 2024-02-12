@@ -11,6 +11,7 @@
 @inherits LayoutComponentBase
 @inject IConfigServices _configService
 @inject NavigationManager NavigationManager;
+@inject LocalizationService _localization
 
 <MudThemeProvider IsDarkMode="IsDarkMode" />
 <MudDialogProvider />
@@ -23,6 +24,11 @@
         <MudSpacer />
 
         <MudIconButton Icon="@Icons.Material.Filled.DarkMode" Color="Color.Inherit" OnClick="@OnDarkModeToggle" />
+        <MudMenu Label="@(Lang["Set Lang"]?.ToString())">
+            <MudMenuItem OnClick="@(()=>SetLangs("en"))">英文</MudMenuItem>
+            <MudMenuItem OnClick="@(()=>SetLangs("zh-tw"))">中文</MudMenuItem>
+        </MudMenu>
+
 
 
 
@@ -50,6 +56,8 @@
     public bool _themeManagerOpen = false;
     public bool IsDarkMode = false;
     JsonNode _config;
+
+    public JsonObject Lang { get; set; }
 
     void DrawerToggle()
     {
@@ -84,6 +92,21 @@
             NavigationManager.NavigateTo(defaultPath);
         }
 
+        var currentLang = _config.ToValue("CurrentLang");
+        SetLangs(currentLang);
+        Lang = _localization.InitLang((lang) =>
+        {
+            Lang = lang;
+            StateHasChanged();
+        });
+
         StateHasChanged();
+    }
+
+    public void SetLangs(string code)
+    {
+        _localization.SetLocalization(code);
+        _config.AsObject()["CurrentLang"] = code;
+        _configService.UpdateConfig(_config);
     }
 }

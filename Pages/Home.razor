@@ -1,7 +1,226 @@
 ﻿@page "/"
+@inject IFolderPicker _folderPicker
+@inject IDialogService _dialogService
+@inject IConfigServices _configService
+@inject LocalizationService _localization
 
-<h1>Hello, world!</h1>
+<MudGrid Justify="Justify.FlexStart">
 
-Welcome to your new app.
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+    <MudItem xs="9">
+        <MudTextField @bind-Value="GodotProjectPath"
+                      Label="Godot Project Path"
+                      ReadOnly="true"
+                      Variant="Variant.Text"></MudTextField>
+    </MudItem>
+
+    <MudItem xs="3" Class="mt-auto">
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   Class="px-2"
+                   OnClick="SetGodotProjectFolderPath">@Lang["Set Path"]</MudButton>
+    </MudItem>
+
+    <MudItem xs="12" Class="mt-auto">
+        <MudAutocomplete T="string"
+                         Label="Select tscn file"
+                         Value="@TscnFileName"
+                         FullWidth="true"
+                         ValueChanged="OnSelectedTscnFile"
+                         SearchFunc="@SearchTscn"
+                         DebounceInterval="800"
+                         ResetValueOnEmptyText="true"
+                         CoerceText="true"
+                         CoerceValue="true"
+                         AdornmentColor="Color.Primary" />
+    </MudItem>
+
+    <MudItem xs="12" Class="mt-auto">
+        <MudExpansionPanels>
+
+            <MudExpansionPanel Text="C# Initialized Nodes">
+                @{
+                    var templateName = "CustomDialogTemplate";
+                }
+                <MudGrid Justify="Justify.FlexStart">
+                    <MudItem xs="6" Class="mt-auto">
+                        <MudButton Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   Disabled="@DisableBuildTemplatesButton"
+                                   OnClick="@(()=>BuildInitNodeTemplate(templateName))">Build Code</MudButton>
+                    </MudItem>
+
+                </MudGrid>
+            </MudExpansionPanel>
+
+        </MudExpansionPanels>
+        @if (IsLoading)
+        {
+            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+        }
+    </MudItem>
+
+</MudGrid>
+
+@code {
+    /// <summary>
+    ///
+    /// </summary>
+    string GodotProjectPath { get; set; }
+
+    string TscnFileName { get; set; }
+
+    List<TscnFileInfo> TscnFileList { get; set; } = new List<TscnFileInfo>();
+
+    bool DisableBuildTemplatesButton = false;
+
+    bool IsLoading = false;
+
+    /// <summary>
+    /// Config Settings
+    /// </summary>
+    public JsonNode Config { get; set; }
+
+    public JsonObject Lang { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Config = _configService.GetConfig();
+        GodotProjectPath = Config.ToValue("GodotProjectPath");
+
+        Lang = _localization.InitLang((lang) =>
+        {
+            Lang = lang;
+            StateHasChanged();
+        });
+
+        CheckedTscnFileList();
+    }
+
+    public void CheckedTscnFileList()
+    {
+        if (Directory.Exists(GodotProjectPath))
+        {
+            TscnFileList.Clear();
+            SearchTscnFiles(GodotProjectPath);
+        }
+    }
+
+    public async void SetGodotProjectFolderPath()
+    {
+        try
+        {
+            var godotProjectPath = _folderPicker.PickFolder();
+            if (Directory.Exists(godotProjectPath))
+            {
+                GodotProjectPath = godotProjectPath;
+                Config["GodotProjectPath"] = GodotProjectPath;
+                _configService.UpdateConfig(Config);
+            }
+        }
+        catch (DirectoryNotFoundException ex)
+        {
+            await _dialogService.ShowMessageBox("Message", "Can't find the path");
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.ShowMessageBox("Error Message", ex.ToString());
+            _configService.ClearConfig();
+        }
+    }
+
+    public async Task OnSelectedTscnFile(object value)
+    {
+        try
+        {
+            this.TscnFileName = value?.ToString();
+            Config.AsObject()["TscnFileName"] = TscnFileName;
+            _configService.UpdateConfig(Config);
+        }
+        catch (FileNotFoundException ex)
+        {
+            await _dialogService.ShowMessageBox("Message", "File doesn't exist.");
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.ShowMessageBox("Error Message", ex.ToString());
+        }
+    }
+
+    public void SearchTscnFiles(string folder)
+    {
+        string[] files = Directory.GetFiles(folder, "*.tscn");
+        foreach (string file in files)
+        {
+            TscnFileList.Add(new TscnFileInfo
+                {
+                    FileName = Path.GetFileName(file),
+                    FileFullPath = file,
+                    FileFolderName = Directory.GetParent(file)?.Name
+                });
+        }
+
+        string[] subFolders = Directory.GetDirectories(folder);
+        foreach (string subFolder in subFolders)
+        {
+            SearchTscnFiles(subFolder);
+        }
+    }
+
+
+    private async Task<IEnumerable<string>> SearchTscn(string tscnName)
+    {
+
+        return await Task.Run(() =>
+        {
+            if (string.IsNullOrEmpty(tscnName))
+            {
+                return TscnFileList.Select(f => $@"{f.FileFolderName}/{f.FileName}").ToList();
+            }
+            return TscnFileList.Select(f => $@"{f.FileFolderName}/{f.FileName}").Where(x => x.Contains(tscnName, StringComparison.InvariantCultureIgnoreCase));
+        });
+    }
+
+
+    public async Task BuildInitNodeTemplate(string templateName)
+    {
+        IsLoading = true;
+        try
+        {
+            await Task.Run(async () =>
+            {
+                //var templateInfo = await CustomTemplateBuilder.BuildTemplate(templateName, TemplateVersion,
+                //    new TemplateConfigs()
+                //        {
+                //            FmbName = FmbName,
+                //            ModuleName = ModuleNanme,
+                //            DefaultBlockName = "",
+                //            //FactoryName = FactoryName,
+                //            OutputFactoryCode = FactoryName,
+                //            CopyFactoryCode = ""
+                //        });
+                //if (!TemplateInfo.ContainsKey(templateName))
+                //{
+                //    TemplateInfo[templateName] = templateInfo;
+                //};
+
+            }).ContinueWith((templateInfo) =>
+            {
+                if (templateInfo.IsCompleted)
+                {
+                    IsLoading = false;
+                }
+
+                if (templateInfo.IsFaulted)
+                {
+                    throw templateInfo.Exception;
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.ShowMessageBox("錯誤", ex.ToString());
+        }
+    }
+
+}

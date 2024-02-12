@@ -21,8 +21,9 @@ public static class Startup
     private static void WireupServices(IServiceCollection services)
     {
         services.AddWindowsFormsBlazorWebView();
-        services.AddSingleton<WeatherForecastService>();
         services.AddSingleton<IConfigServices, ConfigServices>();
+        services.AddTransient<IFolderPicker, FolderPicker>();
+        services.AddSingleton<LocalizationService>();
         services.AddMudServices();
 
 #if DEBUG
