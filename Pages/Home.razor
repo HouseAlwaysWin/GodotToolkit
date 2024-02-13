@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using System.Text.RegularExpressions;
+@using GodotToolkit.Code;
 @inject IFolderPicker _folderPicker
 @inject IDialogService _dialogService
 @inject IConfigServices _configService
@@ -10,7 +11,7 @@
 
     <MudItem xs="9">
         <MudTextField @bind-Value="GodotProjectPath"
-                      Label="Godot Project Path"
+                      Label="@Lang["Godot Project Path"]"
                       ReadOnly="true"
                       Variant="Variant.Text"></MudTextField>
     </MudItem>
@@ -24,7 +25,7 @@
 
     <MudItem xs="12" Class="mt-auto">
         <MudAutocomplete T="string"
-                         Label="Select tscn file"
+                         Label="@Lang["Select tscn file"]"
                          Value="@TscnFileName"
                          FullWidth="true"
                          ValueChanged="OnSelectedTscnFile"
@@ -36,30 +37,46 @@
                          AdornmentColor="Color.Primary" />
     </MudItem>
 
-    <MudItem xs="12" Class="mt-auto">
-        <MudExpansionPanels>
+    @if (!string.IsNullOrWhiteSpace(TscnFileName))
+    {
+        <MudItem xs="12" Class="mt-auto">
+            <MudExpansionPanels>
 
-            <MudExpansionPanel Text="@(Lang["C# Initialized Nodes"])">
-                @{
-                    var templateName = "CustomDialogTemplate";
-                }
-                <MudGrid Justify="Justify.FlexStart">
-                    <MudItem xs="6" Class="mt-auto">
-                        <MudButton Variant="Variant.Filled"
-                                   Color="Color.Primary"
-                                   Disabled="@DisableBuildTemplatesButton"
-                                   OnClick="@(()=>BuildInitNodeTemplate(templateName))">@(Lang["Build Code"])</MudButton>
+                <MudExpansionPanel Text="@(Lang["C# Initialized Nodes"])">
+                    @{
+                        var templateName = "NodeInitializedTemplate";
+                    }
+                    <MudGrid Justify="Justify.FlexStart">
+                        <MudItem xs="6" Class="mt-auto">
+                            <MudButton Variant="Variant.Filled"
+                                       Color="Color.Primary"
+                                       Disabled="@DisableBuildTemplatesButton"
+                                       OnClick="@(()=>BuildInitNodeTemplate(templateName))">
+                                @(Lang["Build Code"])
+                            </MudButton>
                         </MudItem>
 
                     </MudGrid>
+                    <MudItem xs="12" Class="mt-auto">
+                        @if (TemplateInfo.ContainsKey(templateName))
+                        {
+                            var templateInfo = TemplateInfo[templateName];
+                            <MudPaper Class="mud-theme-dark overflow-auto text-break">
+                                <MudContainer Style="height: 500px;  color: ghostwhite">
+                                    @((MarkupString)templateInfo.HtmlContent)
+                                </MudContainer>
+                            </MudPaper>
+                        }
+                    </MudItem>
                 </MudExpansionPanel>
 
             </MudExpansionPanels>
             @if (IsLoading)
-        {
-            <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
-        }
-    </MudItem>
+            {
+                <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
+            }
+        </MudItem>
+    }
 
 </MudGrid>
 
@@ -76,6 +93,11 @@
     bool DisableBuildTemplatesButton = false;
 
     bool IsLoading = false;
+
+    string CurrentVersion { get; set; } = "Godot-v4.2.1";
+
+    public Dictionary<string, TemplateConfigs> TemplateInfo { get; set; } = new Dictionary<string, TemplateConfigs>();
+
 
     /// <summary>
     /// Config Settings
@@ -117,6 +139,7 @@
                 GodotProjectPath = godotProjectPath;
                 Config["GodotProjectPath"] = GodotProjectPath;
                 _configService.UpdateConfig(Config);
+                CheckedTscnFileList();
             }
         }
         catch (DirectoryNotFoundException ex)
@@ -231,6 +254,16 @@
                 if (tscnPath != null)
                 {
                     var tscnInfo = GetTscnInfo(tscnPath.FileFullPath);
+                    var templateInfo = await CodeGenerator.BuildTemplate(templateName, CurrentVersion, new TemplateConfigs
+                        {
+                            InputParameter = tscnInfo
+                        });
+
+                    if (!TemplateInfo.ContainsKey(templateName))
+                    {
+                        TemplateInfo[templateName] = templateInfo;
+                    };
+
                 }
                 //var templateInfo = await CustomTemplateBuilder.BuildTemplate(templateName, TemplateVersion,
                 //    new TemplateConfigs()

@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using GodotToolkit.Data;
+using Microsoft.Extensions.FileProviders;
 using GodotToolkit.Services;
 using MudBlazor.Services;
 
@@ -25,6 +25,13 @@ public static class Startup
         services.AddTransient<IFolderPicker, FolderPicker>();
         services.AddSingleton<LocalizationService>();
         services.AddMudServices();
+
+        var rootPath = @$"{AppDomain.CurrentDomain.BaseDirectory}Code\Templates";
+        services.AddMvcCore().AddRazorRuntimeCompilation(opts =>
+        {
+            opts.FileProviders.Add(new PhysicalFileProvider(rootPath)); // This will be the root path
+        });
+        services.AddRazorTemplating();
 
 #if DEBUG
         services.AddBlazorWebViewDeveloperTools();

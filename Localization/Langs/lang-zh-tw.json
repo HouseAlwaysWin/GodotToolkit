@@ -5,5 +5,8 @@
   "en": "英文",
   "zh-tw": "繁中",
   "Godot Code Generator": "Godot代碼產生器",
-  "Toolkit List": "工具列"
+  "Toolkit List": "工具列",
+  "Godot Project Path": "Godot專案路徑",
+  "Select tscn file": "選擇tscn檔案",
+  "C# Initialized Nodes": "C# Node初始化"
 }
