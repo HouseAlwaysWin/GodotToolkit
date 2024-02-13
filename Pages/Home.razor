@@ -1,6 +1,6 @@
 ﻿@page "/"
 @using System.Text.RegularExpressions;
-@using GodotToolkit.Code;
+@using GodotToolkit.Generator;
 @inject IFolderPicker _folderPicker
 @inject IDialogService _dialogService
 @inject IConfigServices _configService
@@ -47,13 +47,22 @@
                         var templateName = "NodeInitializedTemplate";
                     }
                     <MudGrid Justify="Justify.FlexStart">
-                        <MudItem xs="6" Class="mt-auto">
-                            <MudButton Variant="Variant.Filled"
-                                       Color="Color.Primary"
-                                       Disabled="@DisableBuildTemplatesButton"
-                                       OnClick="@(()=>BuildInitNodeTemplate(templateName))">
-                                @(Lang["Build Code"])
-                            </MudButton>
+                        <MudItem xs="12">
+                            <MudButtonGroup Color="Color.Primary"
+                                            Variant="Variant.Filled">
+                                <MudButton Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           Disabled="@DisableBuildTemplatesButton"
+                                           OnClick="@(()=>BuildInitNodeTemplate(templateName))">
+                                    @(Lang["Build Code"])
+                                </MudButton>
+                                <MudButton Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           Disabled="@DisableBuildTemplatesButton"
+                                           OnClick="@(()=>OutputScript(templateName))">
+                                    @(Lang["Script Output"])
+                                </MudButton>
+                            </MudButtonGroup>
                         </MudItem>
 
                     </MudGrid>
@@ -61,11 +70,14 @@
                         @if (TemplateInfo.ContainsKey(templateName))
                         {
                             var templateInfo = TemplateInfo[templateName];
-                            <MudPaper Class="mud-theme-dark overflow-auto text-break">
-                                <MudContainer Style="height: 500px;  color: ghostwhite">
-                                    @((MarkupString)templateInfo.HtmlContent)
-                                </MudContainer>
-                            </MudPaper>
+                            if (!string.IsNullOrWhiteSpace(templateInfo.HtmlContent))
+                            {
+                                <MudPaper Class="mud-theme-dark overflow-auto text-break">
+                                    <MudContainer Style="height: 500px;  color: ghostwhite">
+                                        @((MarkupString)templateInfo?.HtmlContent)
+                                    </MudContainer>
+                                </MudPaper>
+                            }
                         }
                     </MudItem>
                 </MudExpansionPanel>
@@ -157,6 +169,7 @@
     {
         try
         {
+            TemplateInfo.Clear();
             this.TscnFileName = value?.ToString();
             Config.AsObject()["TscnFileName"] = TscnFileName;
             _configService.UpdateConfig(Config);
@@ -205,41 +218,41 @@
         });
     }
 
-    public List<TscnFileInfo> GetTscnInfo(string path)
-    {
-        List<TscnFileInfo> tscnInfoList = new List<TscnFileInfo>();
-        string nodePattern = @"\[node\s+(?<value>([^>]*))\]";
-        using (StreamReader reader = new StreamReader(path))
-        {
-            string line;
-            while ((line = reader.ReadLine()) != null)
-            {
+    //public List<TscnFileInfo> GetTscnInfo(string path)
+    //{
+    //    List<TscnFileInfo> tscnInfoList = new List<TscnFileInfo>();
+    //    string nodePattern = @"\[node\s+(?<value>([^>]*))\]";
+    //    using (StreamReader reader = new StreamReader(path))
+    //    {
+    //        string line;
+    //        while ((line = reader.ReadLine()) != null)
+    //        {
 
-                //if (line.StartsWith("[node") && line.EndsWith("]"))
-                if (Regex.IsMatch(line, nodePattern))
-                {
-                    var nodeInfo = Regex.Match(line, nodePattern).Groups["value"].Value;
-                    var keyValue = Regex.Matches(nodeInfo, @"(?<key>(\w+))=""(?<value>([^""]+))""|(?<key>(\w+))=\[(?<value>([^>]*))\]")
-                                        .Cast<Match>()
-                                        .ToDictionary(q => q.Groups["key"].Value, q => q.Groups["value"].Value);
-                    var nodeName = keyValue.ContainsKey("name") ? keyValue["name"] : string.Empty;
-                    var nodeType = keyValue.ContainsKey("type") ? keyValue["type"] : string.Empty;
-                    var nodeParent = keyValue.ContainsKey("parent") ? keyValue["parent"] : string.Empty;
-                    var nodeGroups = keyValue.ContainsKey("groups") ? keyValue["groups"].Split(",").ToList() : new List<string>();
-                    var newNode = new TscnFileInfo()
-                        {
-                            FileFullPath = path,
-                            NodeName = nodeName,
-                            NodeType = nodeType,
-                            NodeParent = nodeParent,
-                            NodeGroups = nodeGroups
-                        };
-                    tscnInfoList.Add(newNode);
-                }
-            }
-        }
-        return tscnInfoList;
-    }
+    //            //if (line.StartsWith("[node") && line.EndsWith("]"))
+    //            if (Regex.IsMatch(line, nodePattern))
+    //            {
+    //                var nodeInfo = Regex.Match(line, nodePattern).Groups["value"].Value;
+    //                var keyValue = Regex.Matches(nodeInfo, @"(?<key>(\w+))=""(?<value>([^""]+))""|(?<key>(\w+))=\[(?<value>([^>]*))\]")
+    //                                    .Cast<Match>()
+    //                                    .ToDictionary(q => q.Groups["key"].Value, q => q.Groups["value"].Value);
+    //                var nodeName = keyValue.ContainsKey("name") ? keyValue["name"] : string.Empty;
+    //                var nodeType = keyValue.ContainsKey("type") ? keyValue["type"] : string.Empty;
+    //                var nodeParent = keyValue.ContainsKey("parent") ? keyValue["parent"] : string.Empty;
+    //                var nodeGroups = keyValue.ContainsKey("groups") ? keyValue["groups"].Split(",").ToList() : new List<string>();
+    //                var newNode = new TscnFileInfo()
+    //                    {
+    //                        FileFullPath = path,
+    //                        NodeName = nodeName,
+    //                        NodeType = nodeType,
+    //                        NodeParent = nodeParent,
+    //                        NodeGroups = nodeGroups
+    //                    };
+    //                tscnInfoList.Add(newNode);
+    //            }
+    //        }
+    //    }
+    //    return tscnInfoList;
+    //}
 
 
     public async Task BuildInitNodeTemplate(string templateName)
@@ -249,37 +262,73 @@
         {
             await Task.Run(async () =>
             {
+                if (TemplateInfo.ContainsKey(templateName))
+                {
+                    TemplateInfo[templateName] = new TemplateConfigs();
+                }
+                else
+                {
+                    TemplateInfo.Add(templateName, new TemplateConfigs());
+                }
 
                 var tscnPath = TscnFileList.FirstOrDefault(f => $@"{f.FileFolderName}/{f.FileName}" == TscnFileName);
                 if (tscnPath != null)
                 {
-                    var tscnInfo = GetTscnInfo(tscnPath.FileFullPath);
+                    var tscnInfo = TscnParser.GetNodeList(tscnPath.FileFullPath);
                     var templateInfo = await CodeGenerator.BuildTemplate(templateName, CurrentVersion, new TemplateConfigs
                         {
                             InputParameter = tscnInfo
                         });
 
-                    if (!TemplateInfo.ContainsKey(templateName))
-                    {
-                        TemplateInfo[templateName] = templateInfo;
-                    };
-
+                    TemplateInfo[templateName] = templateInfo;
                 }
-                //var templateInfo = await CustomTemplateBuilder.BuildTemplate(templateName, TemplateVersion,
-                //    new TemplateConfigs()
-                //        {
-                //            FmbName = FmbName,
-                //            ModuleName = ModuleNanme,
-                //            DefaultBlockName = "",
-                //            //FactoryName = FactoryName,
-                //            OutputFactoryCode = FactoryName,
-                //            CopyFactoryCode = ""
-                //        });
-                //if (!TemplateInfo.ContainsKey(templateName))
-                //{
-                //    TemplateInfo[templateName] = templateInfo;
-                //};
+            }).ContinueWith((templateInfo) =>
+            {
+                if (templateInfo.IsCompleted)
+                {
+                    IsLoading = false;
+                }
 
+                if (templateInfo.IsFaulted)
+                {
+                    throw templateInfo.Exception;
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            await _dialogService.ShowMessageBox("錯誤", ex.ToString());
+        }
+    }
+
+
+    public async Task OutputScript(string templateName)
+    {
+        IsLoading = true;
+        try
+        {
+            await Task.Run(async () =>
+            {
+                if (TemplateInfo.ContainsKey(templateName))
+                {
+                    TemplateInfo[templateName] = new TemplateConfigs();
+                }
+                else
+                {
+                    TemplateInfo.Add(templateName, new TemplateConfigs());
+                }
+
+                var tscnPath = TscnFileList.FirstOrDefault(f => $@"{f.FileFolderName}/{f.FileName}" == TscnFileName);
+                if (tscnPath != null)
+                {
+                    var tscnInfo = TscnParser.GetNodeList(tscnPath.FileFullPath);
+                    var templateInfo = await CodeGenerator.BuildTemplate(templateName, CurrentVersion, new TemplateConfigs
+                        {
+                            InputParameter = tscnInfo
+                        });
+
+                    TemplateInfo[templateName] = templateInfo;
+                }
             }).ContinueWith((templateInfo) =>
             {
                 if (templateInfo.IsCompleted)

@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 
-namespace GodotToolkit.Code
+namespace GodotToolkit.Generator
 {
     public class CodeGenerator
     {

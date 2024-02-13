@@ -26,7 +26,7 @@ public static class Startup
         services.AddSingleton<LocalizationService>();
         services.AddMudServices();
 
-        var rootPath = @$"{AppDomain.CurrentDomain.BaseDirectory}Code\Templates";
+        var rootPath = @$"{AppDomain.CurrentDomain.BaseDirectory}Generator\Templates";
         services.AddMvcCore().AddRazorRuntimeCompilation(opts =>
         {
             opts.FileProviders.Add(new PhysicalFileProvider(rootPath)); // This will be the root path

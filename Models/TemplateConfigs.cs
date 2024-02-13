@@ -12,9 +12,9 @@ namespace GodotToolkit.Models
     public class TemplateConfigs
     {
         public object InputParameter { get; set; } = new object();
-        public string OriginalContent { get; set; }
-        public string HtmlContent { get => HttpUtility.HtmlDecode(OriginalContent).ToHtmlString(); }
-        public string Content { get => HttpUtility.HtmlDecode(OriginalContent); }
+        public string? OriginalContent { get; set; }
+        public string? HtmlContent { get => HttpUtility.HtmlDecode(OriginalContent)?.ToHtmlString(); }
+        public string? Content { get => HttpUtility.HtmlDecode(OriginalContent); }
         public string TemplateName { get; set; }
     }
 }
