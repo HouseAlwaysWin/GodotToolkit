@@ -1,3 +1,17 @@
-﻿﻿<MudNavMenu>
-	<MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Code">Godot Code Generator</MudNavLink>
+﻿@inject LocalizationService _localization﻿
+
+<MudNavMenu>
+    <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Code">@Lang["Godot Code Generator"]</MudNavLink>
 </MudNavMenu>
+
+@code {
+    public LangInfo Lang { get; set; }
+    protected override void OnInitialized()
+    {
+        Lang = _localization.InitLang((lang) =>
+              {
+                  Lang = lang;
+                  StateHasChanged();
+              });
+    }
+}

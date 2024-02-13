@@ -25,8 +25,8 @@
 
         <MudIconButton Icon="@Icons.Material.Filled.DarkMode" Color="Color.Inherit" OnClick="@OnDarkModeToggle" />
         <MudMenu Label="@(Lang["Set Lang"]?.ToString())">
-            <MudMenuItem OnClick="@(()=>SetLangs("en"))">英文</MudMenuItem>
-            <MudMenuItem OnClick="@(()=>SetLangs("zh-tw"))">中文</MudMenuItem>
+            <MudMenuItem OnClick="@(()=>SetLangs("en"))">@Lang["en"]</MudMenuItem>
+            <MudMenuItem OnClick="@(()=>SetLangs("zh-tw"))">@Lang["zh-tw"]</MudMenuItem>
         </MudMenu>
 
 
@@ -35,7 +35,7 @@
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Docked" Elevation="2">
         <MudDrawerHeader>
-            <MudText Typo="Typo.h6">Toolkit List</MudText>
+            <MudText Typo="Typo.h6">@Lang["Toolkit List"]</MudText>
         </MudDrawerHeader>
         <NavMenu />
     </MudDrawer>
@@ -57,7 +57,7 @@
     public bool IsDarkMode = false;
     JsonNode _config;
 
-    public JsonObject Lang { get; set; }
+    public LangInfo Lang { get; set; }
 
     void DrawerToggle()
     {

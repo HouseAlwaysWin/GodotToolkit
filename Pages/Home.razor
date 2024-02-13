@@ -39,7 +39,7 @@
     <MudItem xs="12" Class="mt-auto">
         <MudExpansionPanels>
 
-            <MudExpansionPanel Text="C# Initialized Nodes">
+            <MudExpansionPanel Text="@(Lang["C# Initialized Nodes"])">
                 @{
                     var templateName = "CustomDialogTemplate";
                 }
@@ -48,14 +48,14 @@
                         <MudButton Variant="Variant.Filled"
                                    Color="Color.Primary"
                                    Disabled="@DisableBuildTemplatesButton"
-                                   OnClick="@(()=>BuildInitNodeTemplate(templateName))">Build Code</MudButton>
-                    </MudItem>
+                                   OnClick="@(()=>BuildInitNodeTemplate(templateName))">@(Lang["Build Code"])</MudButton>
+                        </MudItem>
 
-                </MudGrid>
-            </MudExpansionPanel>
+                    </MudGrid>
+                </MudExpansionPanel>
 
-        </MudExpansionPanels>
-        @if (IsLoading)
+            </MudExpansionPanels>
+            @if (IsLoading)
         {
             <MudProgressLinear Color="Color.Primary" Indeterminate="true" Class="my-7" />
         }
@@ -82,7 +82,7 @@
     /// </summary>
     public JsonNode Config { get; set; }
 
-    public JsonObject Lang { get; set; }
+    public LangInfo Lang { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

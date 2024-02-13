@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using GodotToolkit.Models;
+using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +17,10 @@ namespace GodotToolkit.Services
     {
         public string ConfigPath;
         public string CurrentLang = "en";
-        public JsonObject Langs;
+        public LangInfo Langs = new LangInfo();
 
-        private readonly ISubject<JsonObject> _langSubject = new Subject<JsonObject>();
-        public IObservable<JsonObject> LangsState => _langSubject;
+        private readonly ISubject<LangInfo> _langSubject = new Subject<LangInfo>();
+        public IObservable<LangInfo> LangsState => _langSubject;
 
         public LocalizationService()
         {
@@ -27,7 +28,7 @@ namespace GodotToolkit.Services
             SetLocalization(CurrentLang);
         }
 
-        public JsonObject InitLang(Action<JsonObject> stateChanged)
+        public LangInfo InitLang(Action<LangInfo> stateChanged)
         {
             this.LangsState.Subscribe(stateChanged);
             return this.Langs;
@@ -35,7 +36,7 @@ namespace GodotToolkit.Services
 
 
 
-        public JsonObject SetLocalization(string code)
+        public LangInfo SetLocalization(string code)
         {
             if (!Directory.Exists(ConfigPath))
             {
@@ -52,14 +53,14 @@ namespace GodotToolkit.Services
                     File.WriteAllText(filePath, "{}");
                 }
                 content = File.ReadAllText(filePath);
-                Langs = JsonNode.Parse(content)?.AsObject() ?? new JsonObject();
+                Langs.UpdateLang(JsonNode.Parse(content)?.AsObject() ?? new JsonObject());
                 CurrentLang = code;
             }
             catch (Exception ex)
             {
                 File.WriteAllText(filePath, "{}");
                 content = File.ReadAllText(ConfigPath);
-                Langs = JsonNode.Parse(content)?.AsObject() ?? new JsonObject();
+                Langs.UpdateLang(JsonNode.Parse(content)?.AsObject() ?? new JsonObject());
             }
             _langSubject.OnNext(Langs);
             return Langs;

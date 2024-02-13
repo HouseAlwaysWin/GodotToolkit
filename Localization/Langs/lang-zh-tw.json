@@ -1,4 +1,9 @@
 {
   "Set Path": "設定路徑",
-  "Set Lang": "語言設定"
+  "Set Lang": "語言設定",
+  "Build Code": "產生代碼",
+  "en": "英文",
+  "zh-tw": "繁中",
+  "Godot Code Generator": "Godot代碼產生器",
+  "Toolkit List": "工具列"
 }
