@@ -13,25 +13,11 @@ namespace GodotToolkit.Generator
 {
     public class TscnParser
     {
-        //public readonly List<TscnFileInfo> NodeList;
-        //public readonly List<TscnFileInfo> ExtResList;
         public readonly TscnFileInfo TscnFile;
         public TscnParser(string path)
         {
             TscnFile = ParseTscn(path);
-            //NodeList = GetNodeList(path);
-            //ExtResList = GetExtResourceList(path);
         }
-
-        //public string GetScriptPath()
-        //{
-        //    var path = ExtResList.FirstOrDefault(p => p.ExtResType == "Script");
-        //    if (path != null)
-        //    {
-        //        return path.ExtResPath;
-        //    }
-        //    return string.Empty;
-        //}
 
         public static Dictionary<string, string> GetTscnTitleProps(string line, string typePattern)
         {
@@ -80,13 +66,13 @@ namespace GodotToolkit.Generator
                 {
                     var props = GetTscnTitleProps(line, nodePattern);
                     var newNode = new TscnNode();
-                    newNode.NodeName = props.GetValueOrDefault("name");
-                    newNode.NodeType = props.GetValueOrDefault("type");
-                    newNode.Parent = props.GetValueOrDefault("parent");
-                    newNode.Index = props.GetValueOrDefault("index");
-                    newNode.Instance = props.GetValueOrDefault("instance");
-                    newNode.InstancePlaceHolder = props.GetValueOrDefault("instance_placeholder");
-                    newNode.Owner = props.GetValueOrDefault("owner");
+                    newNode.NodeName = props.GetValueOrDefault("name", string.Empty);
+                    newNode.NodeType = props.GetValueOrDefault("type", string.Empty);
+                    newNode.Parent = props.GetValueOrDefault("parent", string.Empty);
+                    newNode.Index = props.GetValueOrDefault("index", string.Empty);
+                    newNode.Instance = props.GetValueOrDefault("instance", string.Empty);
+                    newNode.InstancePlaceHolder = props.GetValueOrDefault("instance_placeholder", string.Empty);
+                    newNode.Owner = props.GetValueOrDefault("owner", string.Empty);
                     tscnInfo.Nodes.Add(newNode);
                 }
 
@@ -114,10 +100,10 @@ namespace GodotToolkit.Generator
                 {
                     var props = GetTscnTitleProps(line, connectionPattern);
                     var connInfo = new TscnConnection();
-                    connInfo.Signal = props.GetValueOrDefault("signal");
-                    connInfo.From = props.GetValueOrDefault("from");
-                    connInfo.To = props.GetValueOrDefault("to");
-                    connInfo.Method = props.GetValueOrDefault("method");
+                    connInfo.Signal = props.GetValueOrDefault("signal", string.Empty);
+                    connInfo.From = props.GetValueOrDefault("from", string.Empty);
+                    connInfo.To = props.GetValueOrDefault("to", string.Empty);
+                    connInfo.Method = props.GetValueOrDefault("method", string.Empty);
                     tscnInfo.Connections.Add(connInfo);
                 }
 
@@ -126,77 +112,5 @@ namespace GodotToolkit.Generator
 
             return tscnInfo;
         }
-
-        //public static List<TscnFileInfo> GetExtResourceList(string path)
-        //{
-        //    string extResourcePattern = @"\[ext_resource\s+(?<value>([^>]*))\]";
-        //    string scriptPath = string.Empty;
-        //    List<TscnFileInfo> extResList = new List<TscnFileInfo>();
-
-        //    using (StreamReader reader = new StreamReader(path))
-        //    {
-        //        string line;
-        //        while ((line = reader.ReadLine()) != null)
-        //        {
-        //            if (Regex.IsMatch(line, extResourcePattern))
-        //            {
-        //                var extResourceInfo = Regex.Match(line, extResourcePattern).Groups["value"].Value;
-        //                var extKeyValue = Regex.Matches(extResourceInfo, @"(?<key>(\w+))=""(?<value>([^""]+))""|(?<key>(\w+))=\[(?<value>([^>]*))\]")
-        //                            .Cast<Match>()
-        //                            .ToDictionary(q => q.Groups["key"].Value, q => q.Groups["value"].Value);
-        //                var extType = extKeyValue.ContainsKey("type") ? extKeyValue["type"] : string.Empty;
-        //                var extPath = extKeyValue.ContainsKey("path") ? extKeyValue["path"] : string.Empty;
-        //                var extId = extKeyValue.ContainsKey("id") ? extKeyValue["id"] : string.Empty;
-        //                var newRes = new TscnFileInfo()
-        //                {
-        //                    FileFullPath = path,
-        //                    ExtResType = extType,
-        //                    ExtResPath = extPath,
-        //                    ExtResId = extId
-        //                };
-        //                extResList.Add(newRes);
-
-        //            }
-        //        }
-        //    }
-        //    return extResList;
-        //}
-
-
-        //public static List<TscnFileInfo> GetNodeList(string path)
-        //{
-        //    string nodePattern = @"\[node\s+(?<value>([^>]*))\]";
-        //    List<TscnFileInfo> nodeList = new List<TscnFileInfo>();
-        //    using (StreamReader reader = new StreamReader(path))
-        //    {
-        //        string line;
-        //        while ((line = reader.ReadLine()) != null)
-        //        {
-
-        //            //if (line.StartsWith("[node") && line.EndsWith("]"))
-        //            if (Regex.IsMatch(line, nodePattern))
-        //            {
-        //                var nodeInfo = Regex.Match(line, nodePattern).Groups["value"].Value;
-        //                var keyValue = Regex.Matches(nodeInfo, @"(?<key>(\w+))=""(?<value>([^""]+))""|(?<key>(\w+))=\[(?<value>([^>]*))\]")
-        //                                    .Cast<Match>()
-        //                                    .ToDictionary(q => q.Groups["key"].Value, q => q.Groups["value"].Value);
-        //                var nodeName = keyValue.ContainsKey("name") ? keyValue["name"] : string.Empty;
-        //                var nodeType = keyValue.ContainsKey("type") ? keyValue["type"] : string.Empty;
-        //                var nodeParent = keyValue.ContainsKey("parent") ? keyValue["parent"] : string.Empty;
-        //                var nodeGroups = keyValue.ContainsKey("groups") ? keyValue["groups"].Split(",").ToList() : new List<string>();
-        //                var newNode = new TscnFileInfo()
-        //                {
-        //                    FileFullPath = path,
-        //                    NodeName = nodeName,
-        //                    NodeType = nodeType,
-        //                    NodeParent = nodeParent,
-        //                    NodeGroups = nodeGroups
-        //                };
-        //                nodeList.Add(newNode);
-        //            }
-        //        }
-        //        return nodeList;
-        //    }
-        //}
     }
 }
