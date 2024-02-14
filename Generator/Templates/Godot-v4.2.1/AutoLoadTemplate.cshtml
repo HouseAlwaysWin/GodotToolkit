@@ -1,0 +1,23 @@
+﻿@{
+    var AutoLoadInfo = ((GodotToolkit.Models.TemplateInput)Model.InputParameter).GodotParser.AutoLoadInfo;
+}
+@{
+    foreach (var item in AutoLoadInfo)
+    {
+        var Name = item.Key;
+
+        <text></text>
+        <text>[OnReady("/root/@(Name)")]</text>
+        <text>public @Name @Name;</text>
+        <text></text>
+
+    }
+
+    <text></text>
+    <text>public override void _Ready() </text>
+    <text>{</text>
+    <text>    this.InitOnReady();</text>
+    <text></text>
+    <text>}</text>
+    <text></text>
+}

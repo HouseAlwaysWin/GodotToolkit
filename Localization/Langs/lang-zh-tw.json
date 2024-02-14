@@ -9,5 +9,12 @@
   "Godot Project Path": "Godot專案路徑",
   "Select tscn file": "選擇tscn檔案",
   "C# Initialized Nodes": "C# Node初始化",
-  "Code Output": "輸出代碼"
+  "Code Output": "輸出代碼",
+  "Message": "訊息",
+  "Error Occured": "錯誤發生",
+  "Output file's path can't be empty": "輸出檔案路徑不能為空",
+  "Are you sure ouput file?": "你確定要輸出檔案?",
+  "Output File Successed": "檔案輸出成功",
+  "C# OnReady Nodes Init": "C# OnReady初始化",
+  "C# AutoLoad OnReady Init": "C# AutoLoad OnReady初始化"
 }

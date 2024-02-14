@@ -11,7 +11,9 @@
         @if (!string.IsNullOrWhiteSpace(NodeParent))
         {
             <text></text>
+            <text>[OnReady("@(NodeParent)/@(NodeName)")]</text>
             <text>public @NodeType @NodeName;</text>
+            <text></text>
         }
 
     }
@@ -19,17 +21,7 @@
     <text></text>
     <text>public override void _Ready() </text>
     <text>{</text>
-    foreach (GodotToolkit.Models.TscnNode tscnInfo in TscnInfo.Nodes)
-    {
-        var NodeName = tscnInfo.NodeName;
-        var NodeType = tscnInfo.NodeType;
-        var NodeParent = tscnInfo.Parent;
-        @if (!string.IsNullOrWhiteSpace(NodeParent))
-        {
-            <text></text>
-            <text>    @NodeName =GetNode&lt;@NodeType&gt;("@(NodeParent)/@(NodeName)");</text>
-        }
-    }
+    <text>    this.InitOnReady();</text>
     <text></text>
     <text>}</text>
     <text></text>
