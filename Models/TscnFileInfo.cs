@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,9 +13,14 @@ namespace GodotToolkit.Models
         public string FileFullPath { get; set; }
         public string FileFolderName { get; set; }
 
-        public string NodeName { get; set; }
-        public string NodeType { get; set; }
-        public string NodeParent { get; set; }
-        public List<string> NodeGroups { get; set; } = new List<string>();
+        public string LoadSteps { get; set; }
+        public string Format { get; set; }
+        public string UID { get; set; }
+
+        public List<TscnNode> Nodes = new List<TscnNode>();
+        public List<TscnExtResource> ExtResource = new List<TscnExtResource>();
+        public List<TscnSubResource> SubResource = new List<TscnSubResource>();
+        public List<TscnConnection> Connections = new List<TscnConnection>();
+
     }
 }

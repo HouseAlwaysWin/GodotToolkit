@@ -60,7 +60,7 @@
                                            Color="Color.Primary"
                                            Disabled="@DisableBuildTemplatesButton"
                                            OnClick="@(()=>OutputScript(templateName))">
-                                    @(Lang["Script Output"])
+                                    @(Lang["Code Output"])
                                 </MudButton>
                             </MudButtonGroup>
                         </MudItem>
@@ -274,10 +274,10 @@
                 var tscnPath = TscnFileList.FirstOrDefault(f => $@"{f.FileFolderName}/{f.FileName}" == TscnFileName);
                 if (tscnPath != null)
                 {
-                    var tscnInfo = TscnParser.GetNodeList(tscnPath.FileFullPath);
+                    var tscnInfo = new TscnParser(tscnPath.FileFullPath);
                     var templateInfo = await CodeGenerator.BuildTemplate(templateName, CurrentVersion, new TemplateConfigs
                         {
-                            InputParameter = tscnInfo
+                            InputParameter = tscnInfo.TscnFile
                         });
 
                     TemplateInfo[templateName] = templateInfo;
@@ -321,10 +321,10 @@
                 var tscnPath = TscnFileList.FirstOrDefault(f => $@"{f.FileFolderName}/{f.FileName}" == TscnFileName);
                 if (tscnPath != null)
                 {
-                    var tscnInfo = TscnParser.GetNodeList(tscnPath.FileFullPath);
+                    var tscnInfo = new TscnParser(tscnPath.FileFullPath);
                     var templateInfo = await CodeGenerator.BuildTemplate(templateName, CurrentVersion, new TemplateConfigs
                         {
-                            InputParameter = tscnInfo
+                            InputParameter = tscnInfo.TscnFile
                         });
 
                     TemplateInfo[templateName] = templateInfo;

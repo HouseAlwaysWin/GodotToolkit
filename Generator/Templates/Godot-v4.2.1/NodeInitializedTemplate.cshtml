@@ -1,14 +1,14 @@
 ﻿@{
-    var TscnInfoList = Model.InputParameter as List<GodotToolkit.Models.TscnFileInfo>;
+    var TscnInfo = (GodotToolkit.Models.TscnFileInfo)Model.InputParameter;
 }
 
 @{
 
-    foreach (var tscnInfo in TscnInfoList)
+    foreach (GodotToolkit.Models.TscnNode tscnInfo in TscnInfo.Nodes)
     {
         var NodeName = tscnInfo.NodeName;
         var NodeType = tscnInfo.NodeType;
-        var NodeParent = tscnInfo.NodeParent;
+        var NodeParent = tscnInfo.Parent;
 
         @if (!string.IsNullOrWhiteSpace(NodeParent))
         {
@@ -21,11 +21,11 @@
     <text></text>
     <text>public override void _Ready() </text>
     <text>{</text>
-    foreach (var tscnInfo in TscnInfoList)
+    foreach (GodotToolkit.Models.TscnNode tscnInfo in TscnInfo.Nodes)
     {
         var NodeName = tscnInfo.NodeName;
         var NodeType = tscnInfo.NodeType;
-        var NodeParent = tscnInfo.NodeParent;
+        var NodeParent = tscnInfo.Parent;
         @if (!string.IsNullOrWhiteSpace(NodeParent))
         {
             <text></text>
